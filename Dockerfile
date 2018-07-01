@@ -1,12 +1,14 @@
 FROM haproxy:alpine
 
+ENV STATE=haproxy
+
 MAINTAINER AaronLuellwitz <aaron.luellwitz@gmx.de>
 
 RUN mkdir /run/haproxy/
 RUN mkdir -p /app/logs/
 RUN chmod 777 /app/logs
-COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
+COPY ./*.cfg /usr/local/etc/haproxy/
 
-CMD ["haproxy", "-db", "-f", "/usr/local/etc/haproxy/haproxy.cfg"]
+CMD haproxy -db -f /usr/local/etc/haproxy/${STATE}.cfg
 
-EXPOSE 80 9999 8443
+EXPOSE 80 8443
