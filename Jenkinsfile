@@ -9,17 +9,22 @@ node {
 
       if (isUnix()) {
           /* build docker image */
-          IMAGE_EXISTS = sh(
+          IMAGE_EXISTS = sh( //Check if docker images with name exist on the machine
           script: "docker images -q parcel-proxy",
             returnStatus : true)
           /* Remove the previous build image */
-          if(IMAGE_EXISTS!=""){
+          if(IMAGE_EXISTS!=""){ //If images do exist remove all of them
             sh 'docker rmi -f "asset.allgaeu-parcel-service.com:443/parcel-proxy"'
           }
           sh 'docker build -t "asset.allgaeu-parcel-service.com:443/parcel-proxy" .'
+          //Remove unused images without a tag and other trash
           sh 'docker image prune -f'
 
-      } else {
+      }
+      if (System.properties['os.name'].toLowerCase().contains('windows')) {
+            //Windows Part
+
+      }else {
           /* build docker image */
 
           bat 'docker rmi -f asset.allgaeu-parcel-service.com:443/parcel-proxy'
